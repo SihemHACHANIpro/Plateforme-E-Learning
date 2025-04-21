@@ -20,13 +20,14 @@ import com.example.elearning.repository.ProgrammeRepository;
 @RequestMapping("/programme")
 public class ProgrammeController {
 	@Autowired
-	ProgrammeRepository programmeRepository;
+	private ProgrammeRepository programmeRepository;
 	
 	@PostMapping("/ajouter")
 	public String ajouter(@RequestBody Programme programme) {
 		this.programmeRepository.save(programme);
 		return "enregistrée avec succès";
 	}
+	
 	@GetMapping("/aficherall")
     public List<Programme> afficher() {
         return this.programmeRepository.findAll();

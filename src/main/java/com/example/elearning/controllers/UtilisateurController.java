@@ -3,6 +3,7 @@ package com.example.elearning.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
- 
 import com.example.elearning.models.Utilisateur;
 import com.example.elearning.repository.UtilisateurRepository;
 
 @RestController
 @RequestMapping("/utilisateur")
+@CrossOrigin("*")
 public class UtilisateurController {
 	@Autowired
 	private UtilisateurRepository utilisateurRepository;
@@ -51,19 +52,23 @@ public class UtilisateurController {
 	//_____________________
 	
 	@DeleteMapping("/supprimer/{id}")
-    public String supprimer(@PathVariable Long id) {
+    public List<Utilisateur> supprimer(@PathVariable Long id) {
         this.utilisateurRepository.deleteById(id);
-        return "supprimée avec succès";
+        return this.utilisateurRepository.findAll();
     }
 	
-	@PutMapping("/archiver")
-    public String archiver(Long id) {
+	@PutMapping("/archiver/{id}")
+    public List<Utilisateur> archiver(@PathVariable Long id) {
     	Utilisateur u = this.utilisateurRepository.findById(id).get();
     	u.setArchive(true);
     	this.utilisateurRepository.saveAndFlush(u);
-    	return "true" ;
+    	return this.utilisateurRepository.findAll();
+
     	
     }
+	
+	
+	
 	//___________
 	@GetMapping("/listencours") 
     public List<Utilisateur> listeEnCours() {

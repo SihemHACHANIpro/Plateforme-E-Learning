@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.elearning.models.Formation;
-
 import com.example.elearning.repository.FormationRepository;
 
 @RestController
@@ -31,17 +30,26 @@ public class FormationController {
 	this.formationRepository.save(formtion);
 	return "enregistrée avec succès";
 	}
-	 
+
+	
 
     @GetMapping("/aficherall")
     public List<Formation> afficher() {
         return this.formationRepository.findAll();
     }
 
+    
+    
+   
+
     @GetMapping("/affichagebyid/{id}")
     public Formation affichagebyid(@PathVariable Long id) {
         return this.formationRepository.getFormationById(id);
     }
+    
+    
+    
+    //__________________
 
     @PutMapping("/modification/{id}")
     public Formation update(@PathVariable Long id, @RequestBody Formation formation) {
@@ -55,20 +63,24 @@ public class FormationController {
     }
 
     @DeleteMapping("/supprimer/{id}")
-    public String supprimer(@PathVariable Long id) {
+    public List<Formation> supprimer(@PathVariable Long id) {
         this.formationRepository.deleteById(id);
-        return "supprimée avec succès";
+        return this.formationRepository.findAll();
     }
+
     
     
-    @PutMapping("/archiver")
-    public String archiver(Long id) {
+    
+    @PutMapping("/archiver/{id}")
+    public List<Formation> archiver(@PathVariable Long id) {
     	Formation f = this.formationRepository.findById(id).get();
     	f.setArchive(true);
     	this.formationRepository.saveAndFlush(f);
-    	return "true" ;
+    	return this.formationRepository.findAll();
     	
     }
+    
+   
     
     @PutMapping("/desarchiver")
     public String desarchiver(Long id) {

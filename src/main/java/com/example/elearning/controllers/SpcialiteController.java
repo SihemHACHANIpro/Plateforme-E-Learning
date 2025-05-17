@@ -3,6 +3,7 @@ package com.example.elearning.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.example.elearning.models.Specialite;
 import com.example.elearning.repository.SpecialiteRepository;
 
 @RestController
 @RequestMapping("/Specialite")
+@CrossOrigin("*")
 public class SpcialiteController {
 	@Autowired
 	SpecialiteRepository specialiteRepository;
@@ -41,14 +42,14 @@ public class SpcialiteController {
 	}
 	//___________
 	
-	@DeleteMapping("/supprimer/{id}")
-	public String delete(@PathVariable Long id) {
-	    Specialite sp = this.specialiteRepository.findById(id).get();
-	    this.specialiteRepository.delete(sp);
-	    return "Specialite supprimée avec succès";
-	}
-
 	
+	@DeleteMapping("/supprimer/{id}")
+    public  List<Specialite> supprimer(@PathVariable Long id) {
+        this.specialiteRepository.deleteById(id);
+        return this.specialiteRepository.findAll();
+    }
+
+	//__________________
 	
 	@PutMapping("/modification/{id}")
 	public Specialite  update(@PathVariable Long id, @RequestBody Specialite specialite) {
@@ -63,15 +64,20 @@ public class SpcialiteController {
 		
 	}
 	
-	//
+	//__________________
 	
-	@PutMapping("/archiver")
-	public String archiver(Long id) {
-		Specialite s = this.specialiteRepository.findById(id).get();
-		s.setArchive(true);
-		this.specialiteRepository.saveAndFlush(s);
-		return "true" ;
-	}
+	 @PutMapping("/archiver/{id}")
+	    public List<Specialite>  archiver(@PathVariable 
+	    		Long id) {
+		 Specialite s = this.specialiteRepository.findById(id).get();
+	    	s.setArchive(true);
+	    	this.specialiteRepository.saveAndFlush(s);
+	    	return this.specialiteRepository.findAll();
+	    	
+	    }
+	  
+	
+	
 	
 	
 	@GetMapping("/listencours")

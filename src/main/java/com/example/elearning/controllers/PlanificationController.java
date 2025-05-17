@@ -3,6 +3,7 @@ package com.example.elearning.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import com.example.elearning.repository.PlanificationRepository;
 
 @RestController
 @RequestMapping("/Planification")
+@CrossOrigin("*")
 public class PlanificationController {
 	
 	@Autowired
@@ -52,20 +54,25 @@ public class PlanificationController {
 	        }
 	    }
 	 //______________________
+	 
 	 @DeleteMapping("/supprimer/{id}")
-	    public String supprimer(@PathVariable Long id) {
+	    public  List<Planification> supprimer(@PathVariable Long id) {
 	        this.planificationRepository.deleteById(id);
-	        return "supprimée avec succès";
+	        return this.planificationRepository.findAll();
 	    }
 	 //__________
-	 @PutMapping("/archiver")
-	    public String archiver(Long id) {
-	    	Planification pn = this.planificationRepository.findById(id).get();
-	    	pn.setArchive(true);
-	    	this.planificationRepository.saveAndFlush(pn);
-	    	return "true" ;
+	 @PutMapping("/archiver/{id}")
+	    public List<Planification>  archiver(@PathVariable 
+	    		Long id) {
+	    	Planification p = this.planificationRepository.findById(id).get();
+	    	p.setArchive(true);
+	    	this.planificationRepository.saveAndFlush(p);
+	    	return this.planificationRepository.findAll();
 	    	
 	    }
+	 
+	
+	 
 	 ///______________________
 	 @GetMapping("/listencours") 
 	    public List<Planification> listeEnCours() {     

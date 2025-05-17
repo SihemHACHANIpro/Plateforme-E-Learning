@@ -3,6 +3,7 @@ package com.example.elearning.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.elearning.models.Session;
-
 import com.example.elearning.repository.SessionRepository;
 
 @RestController
 @RequestMapping("/session")
+@CrossOrigin("*")
 public class SesssionController {
 	
 	@Autowired
@@ -56,24 +57,28 @@ public class SesssionController {
 
 	
 	
+	
+	
 	@DeleteMapping("/supprimer/{id}")
-	public String delete(@PathVariable Long id) {
-		Session s = this.sessionRepository.findById(id).get();
-		this.sessionRepository.delete(s);
-		return "session supprimer avec succées";
-	}
-	
-	
+    public  List<Session> supprimer(@PathVariable Long id) {
+        this.sessionRepository.deleteById(id);
+        return this.sessionRepository.findAll();
+    }
 	 
 	
-	@PutMapping("/archiver")
-	public String archiver(Long id) {
+	@PutMapping("/archiver/{id}")
+	public List<Session> archiver(@PathVariable Long id) {
 		Session s= this.sessionRepository.findById(id).get();
 		s.setArchive(true);
 		this.sessionRepository.saveAndFlush(s);
-		return "true";
+    	return this.sessionRepository.findAll();
+
 	}
 	
+	
+  
+
+
 	
 	@PutMapping("/desarchiver")
 	public String desarchiver(Long id) {

@@ -3,6 +3,7 @@ package com.example.elearning.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import com.example.elearning.repository.RapportRepository;
 
 @RestController
 @RequestMapping("/rapport")
+@CrossOrigin("*")
 public class RapportController {
 	@Autowired
 	private RapportRepository rapportRepository;
@@ -54,19 +56,24 @@ public class RapportController {
 //_________________
 	 
 	 @DeleteMapping("/supprimer/{id}")
-	    public String supprimer(@PathVariable Long id) {
+	    public List<Rapport> supprimer(@PathVariable Long id) {
 	        this.rapportRepository.deleteById(id);
-	        return "supprimée avec succès";
+	        return this.rapportRepository.findAll();
 	    }
+	 
 	 //_____________________
-	 @PutMapping("/archiver")
-	    public String archiver(Long id) {
+	 @PutMapping("/archiver/{id}")
+	    public List<Rapport>  archiver(@PathVariable Long id) {
 	    	Rapport r = this.rapportRepository.findById(id).get();
 	    	r.setArchive(true);
 	    	this.rapportRepository.saveAndFlush(r);
-	    	return "true" ;
+	    	return this.rapportRepository.findAll();
+
 	    	
 	    }
+	 
+	 
+	 
 	 //____________________
 	 @GetMapping("/listencours") 
 	    public List<Rapport> listeEnCours() {

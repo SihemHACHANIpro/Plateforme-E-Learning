@@ -19,6 +19,8 @@ public interface FormationRepository extends JpaRepository<Formation, Long> {
 	// Obtenir  les formations  non archivées
 	List<Formation> findByArchiveIsFalse();
 
+
+
 	
 
 	

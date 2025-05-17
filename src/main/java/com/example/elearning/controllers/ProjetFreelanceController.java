@@ -3,6 +3,7 @@ package com.example.elearning.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,11 +12,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.example.elearning.models.ProjetFreelance;
 import com.example.elearning.repository.ProjetFreelanceRepository;
 
 @RestController
 @RequestMapping("/projetfreelance")
+@CrossOrigin("*")
 public class ProjetFreelanceController {
 	@Autowired
 	private ProjetFreelanceRepository projetFreelanceRepository;
@@ -46,20 +49,26 @@ public class ProjetFreelanceController {
 	        }   
 	        
 	    }
-	@DeleteMapping("/supprimer/{id}")
-      public String supprimer(@PathVariable Long id) {
-          this.projetFreelanceRepository.deleteById(id);
-         return "supprimée avec succès";
-      }  
 	
-	@PutMapping("/archiver")
-    public String archiver(Long id) {
-    	ProjetFreelance pf = this.projetFreelanceRepository.findById(id).get();
-    	pf.setArchive(true);
-    	this.projetFreelanceRepository.saveAndFlush(pf);
-    	return "true" ;
-    	
-    }
+	 @DeleteMapping("/supprimer/{id}")
+	    public  List<ProjetFreelance> supprimer(@PathVariable Long id) {
+	    this.projetFreelanceRepository.deleteById(id);
+	     return this.projetFreelanceRepository.findAll();
+	    }
+	 
+	 //______________
+	
+	
+	 @PutMapping("/archiver/{id}")
+	    public List<ProjetFreelance>  archiver(@PathVariable 
+	    		Long id) {
+	    	ProjetFreelance pf = this.projetFreelanceRepository.findById(id).get();
+	    	pf.setArchive(true);
+	    	this.projetFreelanceRepository.saveAndFlush(pf);
+	    	return this.projetFreelanceRepository.findAll();
+	    	
+	    }
+	  
 	
 	@GetMapping("/listencours") // Le chemin pour appeler cette méthode est /projet/listencours
     public List<ProjetFreelance> listeEnCours() {

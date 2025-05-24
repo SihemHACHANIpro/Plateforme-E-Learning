@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.elearning.models.Administrateur;
+import com.example.elearning.models.ChefDeProjet;
 import com.example.elearning.models.Formation;
 import com.example.elearning.repository.AdministrateurRepository;
 
@@ -75,6 +76,12 @@ public class AdministrateurController {
 	    
 	 //_________________  
 
-
+	    @PutMapping("/desarchiver/{id}")
+	    public List<Administrateur> desarchiver(@PathVariable Long id) {
+	    	Administrateur a = this.administrateurRepository.findById(id).get();
+	        a.setArchive(false);
+	        this.administrateurRepository.saveAndFlush(a);
+	        return this.administrateurRepository.findAll();
+	    }
 
 }

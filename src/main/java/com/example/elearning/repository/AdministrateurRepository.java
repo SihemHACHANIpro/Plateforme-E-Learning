@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.elearning.models.Administrateur;
+import com.example.elearning.models.ChefDeProjet;
 
 public interface AdministrateurRepository  extends JpaRepository<Administrateur, Long>{
 
@@ -17,6 +18,8 @@ public interface AdministrateurRepository  extends JpaRepository<Administrateur,
 		List<Administrateur> findByArchiveIsFalse();
 
 		Administrateur getAdministrateurById(Long id);
+
+		
 
 	
 }

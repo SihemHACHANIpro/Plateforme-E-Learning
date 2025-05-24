@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,25 +15,30 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+ @Data
 @Entity
-public class Evenement {
-
-    @Id
+public class Inscription {
+	
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String titre;
-    private String dateEvenement;
-    private String lieu;
-    private String description;
-    private boolean archive;
+	private String date;
+	
+	
+	
+	
+   @ManyToOne
+   @JoinColumn(name = "candidat_id")
+   private Candidat candidat;
 
     @ManyToOne
-    @JoinColumn(name = "admin_id") // Tu peux garder ce nom de colonne
-    @JsonBackReference
-    private Administrateur administrateur;
-
-
+    @JoinColumn(name = "formation_id")
+    private Formation formation;
+    
+    
+    @ManyToOne
+    @JoinColumn(name = "admin_id")
+    @JsonIgnore
+    private Administrateur admin;
 
 }

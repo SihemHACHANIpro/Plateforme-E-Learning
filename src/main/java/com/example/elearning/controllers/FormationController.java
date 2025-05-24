@@ -25,6 +25,7 @@ public class FormationController {
 	@Autowired
 	private FormationRepository formationRepository;
 
+	
 	@PostMapping("/ajouter")
 	public String ajouter(@RequestBody Formation formtion) {
 	this.formationRepository.save(formtion);
@@ -33,13 +34,11 @@ public class FormationController {
 
 	
 
-    @GetMapping("/aficherall")
+    @GetMapping("/afficherall")
     public List<Formation> afficher() {
         return this.formationRepository.findAll();
     }
 
-    
-    
    
 
     @GetMapping("/affichagebyid/{id}")
@@ -82,13 +81,15 @@ public class FormationController {
     
    
     
-    @PutMapping("/desarchiver")
-    public String desarchiver(Long id) {
-    	Formation f = this.formationRepository.findById(id).get();
-    	f.setArchive(false);
-    	this.formationRepository.saveAndFlush(f);
-    	return "true";
+    @PutMapping("/desarchiver/{id}")
+    public List<Formation> desarchiver(@PathVariable Long id) {
+        Formation f = this.formationRepository.findById(id).get();
+        f.setArchive(false);
+        this.formationRepository.saveAndFlush(f);
+        return this.formationRepository.findAll();
     }
+
+    
     
 
     

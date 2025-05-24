@@ -7,33 +7,30 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@Data 
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
 @Entity
-public class Evenement {
+public class Certificat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String titre;
-    private String dateEvenement;
-    private String lieu;
-    private String description;
+    private String dateObention;
+    private String statut;
     private boolean archive;
-
+    
     @ManyToOne
-    @JoinColumn(name = "admin_id") // Tu peux garder ce nom de colonne
-    @JsonBackReference
-    private Administrateur administrateur;
+    @JoinColumn(name = "candidat_id")
+    @JsonIgnoreProperties("certificats")  // Ignore la propriété certificats lors de la sérialisation du candidat
 
-
+    private Candidat candidat;
 
 }

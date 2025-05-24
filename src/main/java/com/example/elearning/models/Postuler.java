@@ -14,40 +14,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Entity
-public class Programme {
+public class Postuler {
 	
-	@Id
+	@Id	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
+	
 	private Long id;
-	private String titre;
 	private String contenu;
-	private boolean archive ;
+	private String inscrireFreelance;
+	private boolean archive;
 	
-	
+	//@ManyToOne
+	//@JoinColumn(name = "candidat_id")
+	//private Candidat candidat;
 	@ManyToOne
-    @JoinColumn(name = "formation_id")
-    @JsonIgnoreProperties("programmes") // Évite les boucles JSON quand Formation a la liste de Programmes
-    private Formation formation;
+    @JoinColumn(name = "candidat_id")
+    private Candidat candidat;
 
+    @ManyToOne
+    @JoinColumn(name = "projet_id")
+    private ProjetFreelance projet;
 
-	
-	
-	public String createProgramme(Programme programme) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	
-
-	
-		
-	}
-		
-	
-
+}

@@ -17,6 +17,9 @@ public interface CandidatRepository extends JpaRepository<Candidat, Long> {
 
 			// Obtenir  les formations  non archivées
 			List<Candidat> findByArchiveIsFalse();
+			
+			
+			
 
 	}
 

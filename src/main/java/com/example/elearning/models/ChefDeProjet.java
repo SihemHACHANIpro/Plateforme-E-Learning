@@ -1,9 +1,11 @@
 package com.example.elearning.models;
 
+import java.util.Collection;
+
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +21,11 @@ public class ChefDeProjet extends Utilisateur {
 	
 	
     private String descriptionProfile;
+    
+ // mappedBy = "chefDeProjet" car relation inverse
+    
+    @OneToMany(mappedBy = "chefDeProjet")
+    private Collection<ProjetFreelance> projets;
    
     
 

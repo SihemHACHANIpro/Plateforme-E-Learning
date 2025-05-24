@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.elearning.models.Formation;
+import com.example.elearning.models.Programme;
 import com.example.elearning.models.Session;
+import com.example.elearning.repository.FormationRepository;
 import com.example.elearning.repository.SessionRepository;
 
 @RestController
@@ -23,12 +26,15 @@ public class SesssionController {
 	
 	@Autowired
 	SessionRepository sessionRepository;
-
-	@PostMapping("/ajouter")
-	public String ajouter(@RequestBody Session session) {
-	    this.sessionRepository.save(session);
-	    return "enregistrée avec succès";
+	@Autowired
+	private FormationRepository formationRepository;	
+	@PostMapping("/ajouter/{idformation}")
+	public Session ajouter(@RequestBody Session session, @PathVariable Long idformation) {
+	    Formation formation = formationRepository.findById(idformation).orElse(null);
+	    session.setFormation(formation);
+	    return sessionRepository.save(session);
 	}
+
 	
 	
 	@GetMapping("/aficherall")
@@ -80,13 +86,13 @@ public class SesssionController {
 
 
 	
-	@PutMapping("/desarchiver")
-	public String desarchiver(Long id) {
-		Session s =this.sessionRepository.findById(id).get();
-		s.setArchive(false);
-		this.sessionRepository.saveAndFlush(s);
-		return "true";
-	}
+	@PutMapping("/desarchiver/{id}")
+    public List<Session> desarchiver(@PathVariable Long id) {
+		Session s = this.sessionRepository.findById(id).get();
+        s.setArchive(false);
+        this.sessionRepository.saveAndFlush(s);
+        return this.sessionRepository.findAll();
+    }
 	
 	
 	

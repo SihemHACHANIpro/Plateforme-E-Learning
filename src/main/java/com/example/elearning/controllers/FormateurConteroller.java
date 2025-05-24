@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.elearning.models.Administrateur;
 import com.example.elearning.models.Formateur;
 import com.example.elearning.repository.FormateurRepository;
 
@@ -36,11 +37,6 @@ public class FormateurConteroller {
 
        
     
-    //@PostMapping("/ajouter")
-    //public String ajouter(@RequestBody Formateur formateur) {
-       // this.formateurRepository.save(formateur);
-       // return "enregistrée avec succès";
-    //}
     
   //________________
     
@@ -81,6 +77,14 @@ public class FormateurConteroller {
     	this.formateurRepository.saveAndFlush(f);
     	return this.formateurRepository.findAll();
     	
+    }
+    
+    @PutMapping("/desarchiver/{id}")
+    public List<Formateur> desarchiver(@PathVariable Long id) {
+    	Formateur f = this.formateurRepository.findById(id).get();
+        f.setArchive(false);
+        this.formateurRepository.saveAndFlush(f);
+        return this.formateurRepository.findAll();
     }
     
     //___________

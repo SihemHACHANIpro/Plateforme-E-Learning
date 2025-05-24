@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.elearning.models.Candidat;
 import com.example.elearning.models.ChefDeProjet;
 import com.example.elearning.models.Formateur;
 import com.example.elearning.repository.ChefDeProjetRepository;
@@ -67,6 +68,13 @@ public class ChefDeProjetController {
     	
     }
 
-    
+    @PutMapping("/desarchiver/{id}")
+    public List<ChefDeProjet> desarchiver(@PathVariable Long id) {
+    	ChefDeProjet ch = this.chefDeProjetRepository.findById(id).get();
+        ch.setArchive(false);
+        this.chefDeProjetRepository.saveAndFlush(ch);
+        return this.chefDeProjetRepository.findAll();
+    }
+ 
     
 }

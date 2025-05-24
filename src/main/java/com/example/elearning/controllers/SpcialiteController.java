@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.elearning.models.Formation;
+import com.example.elearning.models.Session;
 import com.example.elearning.models.Specialite;
+import com.example.elearning.repository.FormationRepository;
 import com.example.elearning.repository.SpecialiteRepository;
 
 @RestController
@@ -22,12 +25,17 @@ import com.example.elearning.repository.SpecialiteRepository;
 public class SpcialiteController {
 	@Autowired
 	SpecialiteRepository specialiteRepository;
-	@PostMapping("/ajouter")
 	
-	public String ajouter(@RequestBody Specialite Specialite ) {
-	this.specialiteRepository.save(Specialite);
-	return"enregistrée avec succès";
+	@Autowired
+	private FormationRepository formationRepository;
+
+	@PostMapping("/ajouter/{idformation}")
+	public Specialite ajouter(@RequestBody Specialite specialite, @PathVariable Long idformation) {
+	    Formation formation = formationRepository.findById(idformation).orElse(null);
+	    specialite.setFormation(formation);
+	    return specialiteRepository.save(specialite);
 	}
+
 	
 	
 	@GetMapping("afficherall")
@@ -85,13 +93,13 @@ public class SpcialiteController {
 		return this.specialiteRepository.findByArchiveIsFalse();
 	}
 	
-	@PutMapping("/desarchiver")
-	public String desarchiver(Long id) {
-		Specialite ps =this.specialiteRepository.findById(id).get();
-		ps.setArchive(false);
-		this.specialiteRepository.saveAndFlush(ps);
-		return "true";
-	}
+	@PutMapping("/desarchiver/{id}")
+    public List<Specialite> desarchiver(@PathVariable Long id) {
+		Specialite sp = this.specialiteRepository.findById(id).get();
+        sp.setArchive(false);
+        this.specialiteRepository.saveAndFlush(sp);
+        return this.specialiteRepository.findAll();
+    }
 	
 	
 	

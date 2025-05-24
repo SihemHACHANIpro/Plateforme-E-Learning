@@ -1,15 +1,23 @@
 package com.example.elearning.models;
 
+import java.util.Collection;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 
 public class Administrateur  extends Utilisateur {
@@ -17,31 +25,21 @@ public class Administrateur  extends Utilisateur {
 	
 	private String type;
 	private boolean archive ;
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	public boolean isArchive() {
-		return archive;
-	}
-	public void setArchive(boolean archive) {
-		this.archive = archive;
-	}
-	public Administrateur() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	@Override
-	public String toString() {
-		return "Administrateur [type=" + type + ", archive=" + archive + ", getType()=" + getType() + ", isArchive()="
-				+ isArchive() + ", getId()=" + getId() + ", getNom()=" + getNom() + ", getPrenom()=" + getPrenom()
-				+ ", getEmail()=" + getEmail() + ", getMotDePass()=" + getMotDePass() + ", getRole()=" + getRole()
-				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + ", getClass()=" + getClass()
-				+ "]";
-	}
 	
 	
+	
+	
+	
+	@OneToMany(mappedBy = "administrateur") // Il faut faire correspondre exactement le nom du champ dans Evenement
+	@JsonManagedReference
+	private Collection<Evenement> evenements;
 
+
+	
+	@OneToMany(mappedBy = "admin")
+	 @JsonIgnore 
+    private Collection<Inscription> inscriptions;
+
+
+	
 }

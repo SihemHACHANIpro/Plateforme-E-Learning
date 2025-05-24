@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
  
 import com.example.elearning.models.Planification;
+import com.example.elearning.models.ProjetFreelance;
+import com.example.elearning.models.Rapport;
 import com.example.elearning.repository.PlanificationRepository;
+import com.example.elearning.repository.ProjetFreelanceRepository;
 
 @RestController
 @RequestMapping("/Planification")
@@ -24,12 +27,21 @@ public class PlanificationController {
 	
 	@Autowired
 	private PlanificationRepository planificationRepository;
+	@Autowired
+	private ProjetFreelanceRepository projetFreelanceRepository;
 	
-	@PostMapping("/ajouter")
-	public String ajouter(@RequestBody Planification planification) {
-	this.planificationRepository.save(planification);
-	return "enregistrée avec succès";
+	
+	@PostMapping("/ajouter/{idprojet}")
+	public Planification ajouter(@RequestBody Planification planification, @PathVariable Long idprojet) {
+	    ProjetFreelance projetFreelance = projetFreelanceRepository.findById(idprojet).orElse(null);
+	    planification.setProjetFreelance(projetFreelance);
+	    return planificationRepository.save(planification);
 	}
+
+	
+	
+	
+	
 	//______________
 	
 	 @GetMapping("/afficherall")
@@ -88,13 +100,15 @@ public class PlanificationController {
 		}
 	 //_____________________
 	 
-	 @PutMapping("/desarchiver")
-	    public String desarchiver(Long id) {
-	    	Planification pn = this.planificationRepository.findById(id).get();
-	    	pn.setArchive(false);
-	    	this.planificationRepository.saveAndFlush(pn);
-	    	return "true";
+	 @PutMapping("/desarchiver/{id}")
+	    public List<Planification> desarchiver(@PathVariable Long id) {
+			Planification p = this.planificationRepository.findById(id).get();
+	        p.setArchive(false);
+	        this.planificationRepository.saveAndFlush(p);
+	        return this.planificationRepository.findAll();
 	    }
+		    
+
 	    
 	    
 	 

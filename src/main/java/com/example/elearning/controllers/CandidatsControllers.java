@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.elearning.models.Candidat;
+import com.example.elearning.models.Formation;
 import com.example.elearning.repository.CandidatRepository;
 
 
@@ -24,7 +25,8 @@ import com.example.elearning.repository.CandidatRepository;
 public class CandidatsControllers {
 	
 	@Autowired
-	private CandidatRepository candidatRepository;	
+	private CandidatRepository candidatRepository;
+	
 	@PostMapping("/ajouter")
 	public ResponseEntity<?> ajouter(@RequestBody Candidat candidat) {
 	    Candidat saved = candidatRepository.save(candidat);
@@ -69,6 +71,14 @@ public class CandidatsControllers {
     	this.candidatRepository.saveAndFlush(c);
     	return this.candidatRepository.findAll();
     	
+    }
+	
+	@PutMapping("/desarchiver/{id}")
+    public List<Candidat> desarchiver(@PathVariable Long id) {
+		Candidat c = this.candidatRepository.findById(id).get();
+        c.setArchive(false);
+        this.candidatRepository.saveAndFlush(c);
+        return this.candidatRepository.findAll();
     }
 
 }

@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.example.elearning.models.Candidat;
+import com.example.elearning.models.Formateur;
+import com.example.elearning.models.Formation;
 import com.example.elearning.models.Programme;
+import com.example.elearning.repository.FormationRepository;
 import com.example.elearning.repository.ProgrammeRepository;
 
 @RestController
@@ -24,11 +27,21 @@ public class ProgrammeController {
 	@Autowired
 	private ProgrammeRepository programmeRepository;
 	
-	@PostMapping("/ajouter")
-	public String ajouter(@RequestBody Programme programme) {
-		this.programmeRepository.save(programme);
-		return "enregistrée avec succès";
+	@Autowired
+	private FormationRepository formationRepository;
+
+	
+	@PostMapping("/ajouter/{idformation}")
+	public Programme ajouter(@RequestBody Programme programme, @PathVariable Long idformation) {
+	    Formation formation = formationRepository.findById(idformation).orElse(null);
+	    programme.setFormation(formation);
+	    return programmeRepository.save(programme);
 	}
+
+
+	   
+
+
 	
 	@GetMapping("/aficherall")
     public List<Programme> afficher() {
@@ -52,6 +65,8 @@ public class ProgrammeController {
 	    }
 	}
 	
+	
+	
 	@DeleteMapping("/supprimer/{id}")
     public  List<Programme> supprimer(@PathVariable Long id) {
         this.programmeRepository.deleteById(id);
@@ -68,14 +83,16 @@ public class ProgrammeController {
     	
     }
 	
-	@PutMapping("/desarchiver")
-	public String desarchiver(Long id) {
-		Programme p =this.programmeRepository.findById(id).get();
-		p.setArchive(false);
-		this.programmeRepository.saveAndFlush(p);
-		return "true";
-	}
 	
+	
+	
+	@PutMapping("/desarchiver/{id}")
+    public List<Programme> desarchiver(@PathVariable Long id) {
+		Programme p = this.programmeRepository.findById(id).get();
+        p.setArchive(false);
+        this.programmeRepository.saveAndFlush(p);
+        return this.programmeRepository.findAll();
+    }
 	//_____________________
 	@DeleteMapping("/supprimerarchiver/{id}")
     public String supprimerProgrammeArchivee(@PathVariable Long id) {

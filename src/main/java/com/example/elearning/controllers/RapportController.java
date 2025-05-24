@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.example.elearning.models.Formation;
+import com.example.elearning.models.Planification;
+import com.example.elearning.models.ProjetFreelance;
 import com.example.elearning.models.Rapport;
+import com.example.elearning.models.Specialite;
+import com.example.elearning.repository.ProjetFreelanceRepository;
 import com.example.elearning.repository.RapportRepository;
 
 @RestController
@@ -23,12 +27,23 @@ import com.example.elearning.repository.RapportRepository;
 public class RapportController {
 	@Autowired
 	private RapportRepository rapportRepository;
+	@Autowired
+	private ProjetFreelanceRepository projetFreelanceRepository;
 	
-	@PostMapping("/ajouter")
-	public String ajouter(@RequestBody Rapport rapport) {
-	this.rapportRepository.save(rapport);
-	return "enregistrée avec succès";
+	
+	@PostMapping("/ajouter/{idprojet}")
+	public Rapport ajouter(@RequestBody Rapport rapport, @PathVariable Long idprojet) {
+	    ProjetFreelance projetFreelance = projetFreelanceRepository.findById(idprojet).orElse(null);
+	    rapport.setProjetFreelance(projetFreelance);
+	    return rapportRepository.save(rapport);
 	}
+
+   
+	
+
+	
+	
+	
 	//__________
 	 @GetMapping("/afficherall")
 	    public List<Rapport> afficher() {
@@ -84,11 +99,12 @@ public class RapportController {
 		public List<Rapport> listeArchivee() {
 		    return this.rapportRepository.findByArchiveIsTrue();
 		}
-	 @PutMapping("/desarchiver")
-	    public String desarchiver(Long id) {
-	    	Rapport r = this.rapportRepository.findById(id).get();
-	    	r.setArchive(false);
-	    	this.rapportRepository.saveAndFlush(r);
-	    	return "true";
+
+	 @PutMapping("/desarchiver/{id}")
+	    public List<Rapport> desarchiver(@PathVariable Long id) {
+			Rapport R = this.rapportRepository.findById(id).get();
+	        R.setArchive(false);
+	        this.rapportRepository.saveAndFlush(R);
+	        return this.rapportRepository.findAll();
 	    }
 }
